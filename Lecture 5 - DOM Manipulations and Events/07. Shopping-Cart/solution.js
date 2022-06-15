@@ -1,0 +1,38 @@
+function solve() {
+   let addBtn = Array.from(document.getElementsByClassName(["add-product"]));
+   let checkoutBtn = document.querySelector(`.checkout`);
+
+   let textArea = document.querySelector(`.shopping-cart textarea:nth-child(5)`);
+
+   addBtn.forEach((el) => el.addEventListener(`click`, onClick));
+
+   checkoutBtn.addEventListener(`click`, checkOutClick);
+
+   let checkOut = [];
+
+   let totalPrice = 0;
+
+   function onClick(event) {
+      let parent = event.target.parentElement.parentElement;
+      let children = parent.children;
+
+      let name = children[1].children[0].textContent;
+      let price = Number(children[3].textContent);
+      totalPrice += price;
+
+      textArea.textContent += `Added ${name} for ${price.toFixed(2)} to the cart.\n`;
+
+      if (checkOut.includes(name) == false) {
+         checkOut.push(name);
+      }
+   }
+
+   function checkOutClick(ev) {
+      textArea.textContent += `You bought ${checkOut.join(`, `)} for ${totalPrice.toFixed(2)}.`;
+
+      if (ev) {
+         checkoutBtn.removeEventListener(`click`, checkOutClick);
+         addBtn.forEach((el) => el.removeEventListener(`click`, onClick));
+      }
+   }
+}
